@@ -1,4 +1,4 @@
-package com.sbb;
+package com.sbb.entity;
 
 import java.time.LocalDateTime;
 
