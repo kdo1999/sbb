@@ -1,5 +1,6 @@
 package com.sbb.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +22,21 @@ public class QuestionService {
 		return this.questionRepository.findAll();
 	}
 
-	@Transactional
 	public Question getQuestion(Long id) {
-		Optional<Question> question = this.questionRepository.findById(id);
+		Optional<Question> question = questionRepository.findById(id);
 		if (question.isPresent()) {
 			return question.get();
 		} else {
 			throw new DataNotFoundException("question not found");
 		}
 	}
+
+	public void create(String subject, String content) {
+        Question question = new Question();
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setCreatedAt(LocalDateTime.now());
+
+        questionRepository.save(question);
+    }
 }
