@@ -24,9 +24,9 @@ class SbbApplicationTests {
 	@Transactional
 	@Test
 	void testJpa() {
-		Question q = this.questionRepository.findBySubjectAndContent(
-                "testSubject1", "testContent1");
-        assertEquals(1, q.getId());
+		List<Question> qList = this.questionRepository.findBySubjectLike("%1");
+        Question q = qList.get(0);
+        assertEquals("testSubject1", q.getSubject());
 	}
 
 }
