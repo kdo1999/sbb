@@ -1,7 +1,11 @@
 package com.sbb;
 
-import java.time.LocalDateTime;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,18 +23,11 @@ class SbbApplicationTests {
 	@Transactional
 	@Test
 	void testJpa() {
-		Question q1 = new Question();
-		q1.setSubject("testSubject1");
-		q1.setContent("testContent1");
-		q1.setCreatedAt(LocalDateTime.now());
+		List<Question> all = this.questionRepository.findAll();
+        assertEquals(2, all.size());
 
-		Question q2 = new Question();
-		q2.setSubject("testSubject2");
-		q2.setContent("testContent2");
-		q2.setCreatedAt(LocalDateTime.now());
-
-		questionRepository.save(q1);
-		questionRepository.save(q2);
+        Question q = all.get(0);
+        assertEquals("testSubject1", q.getSubject());
 	}
 
 }
