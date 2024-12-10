@@ -21,12 +21,13 @@ class SbbApplicationTests {
 	@Autowired
 	private QuestionRepository questionRepository;
 
-	@Transactional
 	@Test
 	void testJpa() {
-		List<Question> qList = this.questionRepository.findBySubjectLike("%1");
-        Question q = qList.get(0);
-        assertEquals("testSubject1", q.getSubject());
+		Optional<Question> oq = this.questionRepository.findById(1L);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+        q.setSubject("수정된 제목");
+        this.questionRepository.save(q);
 	}
 
 }
