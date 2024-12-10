@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sbb.entity.Question;
 import com.sbb.exception.DataNotFoundException;
@@ -20,6 +21,7 @@ public class QuestionService {
 		return this.questionRepository.findAll();
 	}
 
+	@Transactional
 	public Question getQuestion(Long id) {
 		Optional<Question> question = this.questionRepository.findById(id);
 		if (question.isPresent()) {
