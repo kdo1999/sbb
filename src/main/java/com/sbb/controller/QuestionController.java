@@ -10,25 +10,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sbb.entity.Question;
 import com.sbb.repository.QuestionRepository;
-
+import com.sbb.service.QuestionService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
 public class QuestionController {
-
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
 
     @GetMapping("/question/list")
     public String list(Model model) {
-        List<Question> questionList = this.questionRepository.findAll();
+        List<Question> questionList = questionService.getList();
         model.addAttribute("questionList", questionList);
         return "question_list";
     }
 
     @GetMapping(value = "/question/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id) {
+    public String detail(Model model, @PathVariable("id") Long id) {
+        Question question = questionService.getQuestion(id);
+        model.addAttribute("question", question);
         return "question_detail";
     }
 }
