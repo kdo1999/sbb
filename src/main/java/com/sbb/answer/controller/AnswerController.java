@@ -6,12 +6,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sbb.controller.request.AnswerForm;
-import com.sbb.entity.Question;
-import com.sbb.service.AnswerService;
-import com.sbb.service.QuestionService;
+import com.sbb.infrastructure.entity.Question;
+import com.sbb.answer.service.AnswerService;
+import com.sbb.question.service.QuestionService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

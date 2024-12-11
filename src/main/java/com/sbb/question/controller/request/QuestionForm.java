@@ -1,4 +1,4 @@
-package com.sbb.controller.request;
+package com.sbb.question.controller.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

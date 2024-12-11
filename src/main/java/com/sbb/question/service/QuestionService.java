@@ -1,4 +1,4 @@
-package com.sbb.service;
+package com.sbb.question.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.sbb.entity.Question;
-import com.sbb.exception.DataNotFoundException;
-import com.sbb.repository.QuestionRepository;
+import com.sbb.infrastructure.entity.Question;
+import com.sbb.common.exception.DataNotFoundException;
+import com.sbb.infrastructure.repository.QuestionRepository;
 
 import lombok.RequiredArgsConstructor;
 

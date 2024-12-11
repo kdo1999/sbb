@@ -1,12 +1,12 @@
-package com.sbb.service;
+package com.sbb.answer.service;
 
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import com.sbb.entity.Answer;
-import com.sbb.entity.Question;
-import com.sbb.repository.AnswerRepository;
+import com.sbb.infrastructure.entity.Answer;
+import com.sbb.infrastructure.entity.Question;
+import com.sbb.infrastructure.repository.AnswerRepository;
 
 import lombok.RequiredArgsConstructor;
 

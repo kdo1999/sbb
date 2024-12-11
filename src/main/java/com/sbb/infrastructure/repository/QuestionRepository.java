@@ -1,4 +1,4 @@
-package com.sbb.repository;
+package com.sbb.infrastructure.repository;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sbb.entity.Question;
+import com.sbb.infrastructure.entity.Question;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 	Question findBySubject(String subject);
