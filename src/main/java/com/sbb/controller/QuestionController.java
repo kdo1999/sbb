@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sbb.controller.request.AnswerForm;
 import com.sbb.controller.request.QuestionForm;
 import com.sbb.entity.Question;
 import com.sbb.repository.QuestionRepository;
@@ -35,7 +36,7 @@ public class QuestionController {
 	}
 
 	@GetMapping("/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Long id) {
+	public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm) {
 		Question question = questionService.getQuestion(id);
 		model.addAttribute("question", question);
 		return "question_detail";
