@@ -20,6 +20,11 @@ public class SiteUserController {
 
 	private final SiteUserService siteUserService;
 
+	@GetMapping("/login")
+	public String login() {
+		return "login_form.html";
+	}
+
 	@GetMapping("/signup")
 	public String signup(SiteUserCreateForm siteUserCreateForm) {
 		return "signup_form";

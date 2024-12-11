@@ -2,6 +2,9 @@ package com.sbb.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +20,12 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests(httpRequest -> httpRequest
 				.requestMatchers("/**").permitAll()
-			);
+				.requestMatchers(HttpMethod.POST, "/user/login").permitAll()
+			)
+			.formLogin((formLogin) -> {
+				formLogin.loginPage("/user/login")
+					.defaultSuccessUrl("/");
+			});
 
 		return http.build();
 	}
@@ -26,4 +34,9 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+	@Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 }
