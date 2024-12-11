@@ -1,4 +1,4 @@
-package com.sbb.infrastructure.question.entity;
+package com.sbb.security;
 
 import lombok.Getter;
 
