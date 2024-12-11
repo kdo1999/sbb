@@ -1,8 +1,10 @@
-package com.sbb.infrastructure.entity;
+package com.sbb.infrastructure.question.entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sbb.infrastructure.answer.entity.Answer;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -1,6 +1,8 @@
-package com.sbb.infrastructure.entity;
+package com.sbb.infrastructure.answer.entity;
 
 import java.time.LocalDateTime;
+
+import com.sbb.infrastructure.question.entity.Question;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

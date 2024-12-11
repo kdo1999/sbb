@@ -11,9 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.sbb.infrastructure.entity.Question;
+import com.sbb.infrastructure.question.entity.Question;
 import com.sbb.common.exception.DataNotFoundException;
-import com.sbb.infrastructure.repository.QuestionRepository;
+import com.sbb.infrastructure.question.repository.QuestionRepository;
 
 import lombok.RequiredArgsConstructor;
 

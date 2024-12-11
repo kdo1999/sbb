@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import com.sbb.infrastructure.entity.Answer;
-import com.sbb.infrastructure.entity.Question;
-import com.sbb.infrastructure.repository.AnswerRepository;
+import com.sbb.infrastructure.answer.entity.Answer;
+import com.sbb.infrastructure.question.entity.Question;
+import com.sbb.infrastructure.answer.repository.AnswerRepository;
 
 import lombok.RequiredArgsConstructor;
 

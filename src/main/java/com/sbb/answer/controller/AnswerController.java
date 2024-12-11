@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sbb.controller.request.AnswerForm;
-import com.sbb.infrastructure.entity.Question;
+import com.sbb.infrastructure.question.entity.Question;
 import com.sbb.answer.service.AnswerService;
 import com.sbb.question.service.QuestionService;
 

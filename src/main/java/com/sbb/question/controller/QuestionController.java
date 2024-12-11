@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sbb.controller.request.AnswerForm;
 import com.sbb.question.controller.request.QuestionForm;
-import com.sbb.infrastructure.entity.Question;
+import com.sbb.infrastructure.question.entity.Question;
 import com.sbb.question.service.QuestionService;
 
 import jakarta.validation.Valid;
