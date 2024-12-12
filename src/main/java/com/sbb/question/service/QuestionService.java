@@ -59,4 +59,8 @@ public class QuestionService {
         question.setModifiedAt(LocalDateTime.now());
         this.questionRepository.save(question);
     }
+
+	public void delete(Question question) {
+        questionRepository.delete(question);
+    }
 }
