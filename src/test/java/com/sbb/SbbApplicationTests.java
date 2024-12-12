@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
-import com.sbb.infrastructure.siteUser.repository.SiteUserRepository;
+import com.sbb.infrastructure.siteUser.repository.SiteUserJpaRepository;
 import com.sbb.question.service.QuestionService;
 
 @SpringBootTest
@@ -14,7 +14,7 @@ class SbbApplicationTests {
 	@Autowired
 	private QuestionService questionService;
 	@Autowired
-	private SiteUserRepository siteUserRepository;
+	private SiteUserJpaRepository siteUserRepository;
 	@Test
     void testJpa() {
         for (int i = 1; i <= 300; i++) {

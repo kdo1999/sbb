@@ -1,9 +1,11 @@
 package com.sbb.infrastructure.answer.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-import com.sbb.infrastructure.answer.entity.AnswerEntity;
+import com.sbb.answer.domain.Answer;
 
-public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
-
+public interface AnswerRepository {
+	Answer save(Answer answer);
+	Optional<Answer> findById(Long id);
+	void delete(Answer answer);
 }

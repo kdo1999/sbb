@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
 import com.sbb.infrastructure.siteUser.repository.SiteUserRepository;
+import com.sbb.siteUser.domain.SiteUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,17 +24,17 @@ public class CustomSiteUserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<SiteUserEntity> optionalSiteUser = siteUserRepository.findByUsername(username);
+		Optional<SiteUser> optionalSiteUser = siteUserRepository.findByUsername(username);
         if (optionalSiteUser.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
         }
-        SiteUserEntity siteUserEntity = optionalSiteUser.get();
+        SiteUser siteUser = optionalSiteUser.get();
         List<GrantedAuthority> authorities = new ArrayList<>();
         if ("admin".equals(username)) {
             authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
         } else {
             authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
         }
-        return new User(siteUserEntity.getUsername(), siteUserEntity.getPassword(), authorities);
+        return new User(siteUser.username(), siteUser.password(), authorities);
 	}
 }
