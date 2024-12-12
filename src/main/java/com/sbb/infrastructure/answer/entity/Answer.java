@@ -1,6 +1,7 @@
 package com.sbb.infrastructure.answer.entity;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import com.sbb.infrastructure.question.entity.Question;
 import com.sbb.infrastructure.siteUser.entity.SiteUser;
@@ -10,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,4 +36,7 @@ public class Answer {
     private SiteUser author;
 
     private LocalDateTime modifiedAt;
+
+    @ManyToMany
+    Set<SiteUser> voter;
 }

@@ -82,7 +82,16 @@ public class AnswerController {
         if (!answer.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
         }
-        this.answerService.delete(answer);
+       answerService.delete(answer);
+        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String answerVote(Principal principal, @PathVariable("id") Long id) {
+        Answer answer = answerService.getAnswer(id);
+        SiteUser siteUser = siteUserService.findByUsername(principal.getName());
+        answerService.vote(answer, siteUser);
         return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
     }
 }

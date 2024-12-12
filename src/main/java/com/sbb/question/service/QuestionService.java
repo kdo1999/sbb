@@ -63,4 +63,12 @@ public class QuestionService {
 	public void delete(Question question) {
         questionRepository.delete(question);
     }
+
+	public void vote(Question question, SiteUser siteUser) {
+		if (question.getVoter().contains(siteUser)) {
+			return;
+		}
+        question.getVoter().add(siteUser);
+        questionRepository.save(question);
+    }
 }

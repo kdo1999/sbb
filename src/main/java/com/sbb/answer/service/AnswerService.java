@@ -49,4 +49,12 @@ public class AnswerService {
     public void delete(Answer answer) {
         answerRepository.delete(answer);
     }
+
+    public void vote(Answer answer, SiteUser siteUser) {
+        if (answer.getVoter().contains(siteUser)) {
+            return;
+        }
+        answer.getVoter().add(siteUser);
+        answerRepository.save(answer);
+    }
 }
