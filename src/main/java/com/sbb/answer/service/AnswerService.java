@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.sbb.common.exception.DataNotFoundException;
-import com.sbb.infrastructure.answer.entity.Answer;
+import com.sbb.infrastructure.answer.entity.AnswerEntity;
 import com.sbb.infrastructure.answer.repository.AnswerRepository;
-import com.sbb.infrastructure.question.entity.Question;
-import com.sbb.infrastructure.siteUser.entity.SiteUser;
+import com.sbb.infrastructure.question.entity.QuestionEntity;
+import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,20 +20,20 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
 
 
-    public Answer create(Question question, String content, SiteUser siteUser) {
-        Answer answer = new Answer();
-        answer.setContent(content);
-        answer.setCreatedAt(LocalDateTime.now());
-        answer.setQuestion(question);
-        answer.setAuthor(siteUser);
+    public AnswerEntity create(QuestionEntity questionEntity, String content, SiteUserEntity siteUserEntity) {
+        AnswerEntity answerEntity = new AnswerEntity();
+        answerEntity.setContent(content);
+        answerEntity.setCreatedAt(LocalDateTime.now());
+        answerEntity.setQuestionEntity(questionEntity);
+        answerEntity.setAuthor(siteUserEntity);
 
-		answerRepository.save(answer);
+		answerRepository.save(answerEntity);
 
-        return answer;
+        return answerEntity;
     }
 
-    public Answer getAnswer(Long id) {
-        Optional<Answer> answer = answerRepository.findById(id);
+    public AnswerEntity getAnswer(Long id) {
+        Optional<AnswerEntity> answer = answerRepository.findById(id);
         if (answer.isPresent()) {
             return answer.get();
         } else {
@@ -41,22 +41,22 @@ public class AnswerService {
         }
     }
 
-    public void modify(Answer answer, String content) {
-        answer.setContent(content);
-        answer.setModifiedAt(LocalDateTime.now());
+    public void modify(AnswerEntity answerEntity, String content) {
+        answerEntity.setContent(content);
+        answerEntity.setModifiedAt(LocalDateTime.now());
 
-        answerRepository.save(answer);
+        answerRepository.save(answerEntity);
     }
 
-    public void delete(Answer answer) {
-        answerRepository.delete(answer);
+    public void delete(AnswerEntity answerEntity) {
+        answerRepository.delete(answerEntity);
     }
 
-    public void vote(Answer answer, SiteUser siteUser) {
-        if (answer.getVoter().contains(siteUser)) {
+    public void vote(AnswerEntity answerEntity, SiteUserEntity siteUserEntity) {
+        if (answerEntity.getVoter().contains(siteUserEntity)) {
             return;
         }
-        answer.getVoter().add(siteUser);
-        answerRepository.save(answer);
+        answerEntity.getVoter().add(siteUserEntity);
+        answerRepository.save(answerEntity);
     }
 }

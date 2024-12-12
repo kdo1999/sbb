@@ -15,9 +15,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.sbb.answer.service.AnswerService;
 import com.sbb.controller.request.AnswerForm;
-import com.sbb.infrastructure.answer.entity.Answer;
-import com.sbb.infrastructure.question.entity.Question;
-import com.sbb.infrastructure.siteUser.entity.SiteUser;
+import com.sbb.infrastructure.answer.entity.AnswerEntity;
+import com.sbb.infrastructure.question.entity.QuestionEntity;
+import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
 import com.sbb.question.service.QuestionService;
 import com.sbb.siteUser.service.SiteUserService;
 
@@ -36,29 +36,29 @@ public class AnswerController {
 	@PostMapping("/create/{id}")
 	public String createAnswer(Model model, @PathVariable("id") Long id, @Valid AnswerForm answerForm,
 		BindingResult bindingResult, Principal principal) {
-		Question question = questionService.getQuestion(id);
+		QuestionEntity questionEntity = questionService.getQuestion(id);
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("question", question);
+			model.addAttribute("question", questionEntity);
 			return "question_detail";
 		}
 
-		SiteUser siteUser = siteUserService.findByUsername(principal.getName());
+		SiteUserEntity siteUserEntity = siteUserService.findByUsername(principal.getName());
 
-		Answer answer = answerService.create(question,
-			answerForm.getContent(), siteUser);
+		AnswerEntity answerEntity = answerService.create(questionEntity,
+			answerForm.getContent(), siteUserEntity);
 		return String.format("redirect:/question/detail/%s#answer_%s",
-			answer.getQuestion().getId(), answer.getId());
+			answerEntity.getQuestionEntity().getId(), answerEntity.getId());
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{id}")
 	public String answerModify(AnswerForm answerForm, @PathVariable("id") Long id, Principal principal) {
-		Answer answer = answerService.getAnswer(id);
-		if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+		AnswerEntity answerEntity = answerService.getAnswer(id);
+		if (!answerEntity.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
-		answerForm.setContent(answer.getContent());
+		answerForm.setContent(answerEntity.getContent());
 		return "answer_form";
 	}
 
@@ -69,34 +69,34 @@ public class AnswerController {
 		if (bindingResult.hasErrors()) {
 			return "answer_form";
 		}
-		Answer answer = answerService.getAnswer(id);
-		if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+		AnswerEntity answerEntity = answerService.getAnswer(id);
+		if (!answerEntity.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
-		answerService.modify(answer, answerForm.getContent());
+		answerService.modify(answerEntity, answerForm.getContent());
 
 		return String.format("redirect:/question/detail/%s#answer_%s",
-			answer.getQuestion().getId(), answer.getId());
+			answerEntity.getQuestionEntity().getId(), answerEntity.getId());
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete/{id}")
 	public String answerDelete(Principal principal, @PathVariable("id") Long id) {
-		Answer answer = answerService.getAnswer(id);
-		if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+		AnswerEntity answerEntity = answerService.getAnswer(id);
+		if (!answerEntity.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
 		}
-		answerService.delete(answer);
-		return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+		answerService.delete(answerEntity);
+		return String.format("redirect:/question/detail/%s", answerEntity.getQuestionEntity().getId());
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/vote/{id}")
 	public String answerVote(Principal principal, @PathVariable("id") Long id) {
-		Answer answer = answerService.getAnswer(id);
-		SiteUser siteUser = siteUserService.findByUsername(principal.getName());
-		answerService.vote(answer, siteUser);
+		AnswerEntity answerEntity = answerService.getAnswer(id);
+		SiteUserEntity siteUserEntity = siteUserService.findByUsername(principal.getName());
+		answerService.vote(answerEntity, siteUserEntity);
 		return String.format("redirect:/question/detail/%s#answer_%s",
-			answer.getQuestion().getId(), answer.getId());
+			answerEntity.getQuestionEntity().getId(), answerEntity.getId());
 	}
 }

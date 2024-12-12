@@ -13,10 +13,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.sbb.common.exception.DataNotFoundException;
-import com.sbb.infrastructure.answer.entity.Answer;
-import com.sbb.infrastructure.question.entity.Question;
+import com.sbb.infrastructure.answer.entity.AnswerEntity;
+import com.sbb.infrastructure.question.entity.QuestionEntity;
 import com.sbb.infrastructure.question.repository.QuestionRepository;
-import com.sbb.infrastructure.siteUser.entity.SiteUser;
+import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -31,12 +31,12 @@ import lombok.RequiredArgsConstructor;
 public class QuestionService {
 	private final QuestionRepository questionRepository;
 
-	public List<Question> getList() {
+	public List<QuestionEntity> getList() {
 		return this.questionRepository.findAll();
 	}
 
-	public Question getQuestion(Long id) {
-		Optional<Question> question = questionRepository.findById(id);
+	public QuestionEntity getQuestion(Long id) {
+		Optional<QuestionEntity> question = questionRepository.findById(id);
 		if (question.isPresent()) {
 			return question.get();
 		} else {
@@ -44,52 +44,52 @@ public class QuestionService {
 		}
 	}
 
-	public void create(String subject, String content, SiteUser siteUser) {
-        Question question = new Question();
-        question.setSubject(subject);
-        question.setContent(content);
-        question.setCreatedAt(LocalDateTime.now());
-		question.setAuthor(siteUser);
+	public void create(String subject, String content, SiteUserEntity siteUserEntity) {
+        QuestionEntity questionEntity = new QuestionEntity();
+        questionEntity.setSubject(subject);
+        questionEntity.setContent(content);
+        questionEntity.setCreatedAt(LocalDateTime.now());
+		questionEntity.setAuthor(siteUserEntity);
 
-        questionRepository.save(question);
+        questionRepository.save(questionEntity);
     }
 
-	public Page<Question> getList(int page, String kw) {
+	public Page<QuestionEntity> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createdAt"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-		Specification<Question> spec = search(kw);
+		Specification<QuestionEntity> spec = search(kw);
         return questionRepository.findAllByKeyword(kw, pageable);
     }
 
-	public void modify(Question question, String subject, String content) {
-        question.setSubject(subject);
-        question.setContent(content);
-        question.setModifiedAt(LocalDateTime.now());
-        this.questionRepository.save(question);
+	public void modify(QuestionEntity questionEntity, String subject, String content) {
+        questionEntity.setSubject(subject);
+        questionEntity.setContent(content);
+        questionEntity.setModifiedAt(LocalDateTime.now());
+        this.questionRepository.save(questionEntity);
     }
 
-	public void delete(Question question) {
-        questionRepository.delete(question);
+	public void delete(QuestionEntity questionEntity) {
+        questionRepository.delete(questionEntity);
     }
 
-	public void vote(Question question, SiteUser siteUser) {
-		if (question.getVoter().contains(siteUser)) {
+	public void vote(QuestionEntity questionEntity, SiteUserEntity siteUserEntity) {
+		if (questionEntity.getVoter().contains(siteUserEntity)) {
 			return;
 		}
-        question.getVoter().add(siteUser);
-        questionRepository.save(question);
+        questionEntity.getVoter().add(siteUserEntity);
+        questionRepository.save(questionEntity);
     }
 
-	private Specification<Question> search(String kw) {
+	private Specification<QuestionEntity> search(String kw) {
         return new Specification<>() {
             private static final long serialVersionUID = 1L;
             @Override
-            public Predicate toPredicate(Root<Question> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<QuestionEntity> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);  // 중복을 제거
-                Join<Question, SiteUser> u1 = q.join("author", JoinType.LEFT);
-                Join<Question, Answer> a = q.join("answerList", JoinType.LEFT);
-                Join<Answer, SiteUser> u2 = a.join("author", JoinType.LEFT);
+                Join<QuestionEntity, SiteUserEntity> u1 = q.join("author", JoinType.LEFT);
+                Join<QuestionEntity, AnswerEntity> a = q.join("answerList", JoinType.LEFT);
+                Join<AnswerEntity, SiteUserEntity> u2 = a.join("author", JoinType.LEFT);
                 return cb.or(cb.like(q.get("subject"), "%" + kw + "%"), // 제목
                         cb.like(q.get("content"), "%" + kw + "%"),      // 내용
                         cb.like(u1.get("username"), "%" + kw + "%"),    // 질문 작성자

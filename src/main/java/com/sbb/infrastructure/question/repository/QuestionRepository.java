@@ -8,24 +8,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.sbb.infrastructure.question.entity.Question;
+import com.sbb.infrastructure.question.entity.QuestionEntity;
 
-public interface QuestionRepository extends JpaRepository<Question, Long> {
-	Question findBySubject(String subject);
-	Question findBySubjectAndContent(String subject, String content);
-	List<Question> findBySubjectLike(String subject);
-	Page<Question> findAll(Pageable pageable);
+public interface QuestionRepository extends JpaRepository<QuestionEntity, Long> {
+	QuestionEntity findBySubject(String subject);
+	QuestionEntity findBySubjectAndContent(String subject, String content);
+	List<QuestionEntity> findBySubjectLike(String subject);
+	Page<QuestionEntity> findAll(Pageable pageable);
 	@Query("select "
             + "distinct q "
-            + "from Question q "
-            + "left outer join SiteUser u1 on q.author=u1 "
-            + "left outer join Answer a on a.question=q "
-            + "left outer join SiteUser u2 on a.author=u2 "
+            + "from QuestionEntity q "
+            + "left outer join SiteUserEntity u1 on q.author=u1 "
+            + "left outer join AnswerEntity a on a.question=q "
+            + "left outer join SiteUserEntity u2 on a.author=u2 "
             + "where "
             + "   q.subject like %:kw% "
             + "   or q.content like %:kw% "
             + "   or u1.username like %:kw% "
             + "   or a.content like %:kw% "
             + "   or u2.username like %:kw% ")
-    Page<Question> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
+    Page<QuestionEntity> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
 }

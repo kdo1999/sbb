@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sbb.common.exception.DataNotFoundException;
-import com.sbb.infrastructure.siteUser.entity.SiteUser;
+import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
 import com.sbb.infrastructure.siteUser.repository.SiteUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,18 +17,18 @@ public class SiteUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final SiteUserRepository siteUserRepository;
 
-	public SiteUser save(String username, String email, String password) {
-		SiteUser siteUser = new SiteUser();
-		siteUser.setUsername(username);
-		siteUser.setEmail(email);
-		siteUser.setPassword(passwordEncoder.encode(password));
+	public SiteUserEntity save(String username, String email, String password) {
+		SiteUserEntity siteUserEntity = new SiteUserEntity();
+		siteUserEntity.setUsername(username);
+		siteUserEntity.setEmail(email);
+		siteUserEntity.setPassword(passwordEncoder.encode(password));
 
-		siteUserRepository.save(siteUser);
-		return siteUser;
+		siteUserRepository.save(siteUserEntity);
+		return siteUserEntity;
 	}
 
-	public SiteUser findByUsername(String username) {
-        Optional<SiteUser> siteUser = siteUserRepository.findByUsername(username);
+	public SiteUserEntity findByUsername(String username) {
+        Optional<SiteUserEntity> siteUser = siteUserRepository.findByUsername(username);
         if (siteUser.isPresent()) {
             return siteUser.get();
         } else {

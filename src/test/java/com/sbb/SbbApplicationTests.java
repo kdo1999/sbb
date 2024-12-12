@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.sbb.infrastructure.siteUser.entity.SiteUser;
+import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
 import com.sbb.infrastructure.siteUser.repository.SiteUserRepository;
 import com.sbb.question.service.QuestionService;
 
@@ -20,7 +20,7 @@ class SbbApplicationTests {
         for (int i = 1; i <= 300; i++) {
             String subject = String.format("테스트 데이터입니다:[%03d]", i);
             String content = "내용무";
-			SiteUser testUser = siteUserRepository.findByUsername("testUser").get();
+			SiteUserEntity testUser = siteUserRepository.findByUsername("testUser").get();
 			questionService.create(subject, content, testUser);
         }
     }

@@ -2,8 +2,8 @@ package com.sbb.infrastructure.answer.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sbb.infrastructure.answer.entity.Answer;
+import com.sbb.infrastructure.answer.entity.AnswerEntity;
 
-public interface AnswerRepository extends JpaRepository<Answer, Long> {
+public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
 
 }

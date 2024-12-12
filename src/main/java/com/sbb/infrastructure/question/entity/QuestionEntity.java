@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.sbb.infrastructure.answer.entity.Answer;
-import com.sbb.infrastructure.siteUser.entity.SiteUser;
+import com.sbb.infrastructure.answer.entity.AnswerEntity;
+import com.sbb.infrastructure.siteUser.entity.SiteUserEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,13 +17,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class Question {
+@Table(name = "question")
+public class QuestionEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,14 +39,14 @@ public class Question {
 
 	private LocalDateTime createdAt;
 
-	@OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-	private List<Answer> answerList = new ArrayList<>();
+	@OneToMany(mappedBy = "questionEntity", cascade = CascadeType.REMOVE)
+	private List<AnswerEntity> answerEntityList = new ArrayList<>();
 
 	@ManyToOne
-    private SiteUser author;
+    private SiteUserEntity author;
 
 	private LocalDateTime modifiedAt;
 
 	@ManyToMany
-	Set<SiteUser> voter;
+	Set<SiteUserEntity> voter;
 }
