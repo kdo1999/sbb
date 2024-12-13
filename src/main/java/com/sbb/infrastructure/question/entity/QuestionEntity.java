@@ -93,7 +93,7 @@ public class QuestionEntity {
 			.content(content)
 			.createdAt(createdAt)
 			.answerList(answerEntityList.isEmpty() ? new ArrayList<>() : answerEntityList.stream()
-				.map(answerEntity -> answerEntity.toModel())
+				.map(AnswerEntity::toModel)
 				.toList()
 			)
 			.author(author.toModel())
