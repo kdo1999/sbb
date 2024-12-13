@@ -15,6 +15,7 @@ import com.sbb.answer.domain.Answer;
 import com.sbb.common.exception.DataNotFoundException;
 import com.sbb.infrastructure.answer.repository.AnswerRepository;
 import com.sbb.question.domain.Question;
+import com.sbb.question.domain.SelectSortBy;
 import com.sbb.siteUser.domain.SiteUser;
 
 import lombok.RequiredArgsConstructor;
@@ -75,18 +76,20 @@ public class AnswerService {
         answerRepository.save(answer);
     }
 
-    public Page<Answer> findByQustionId(Long questionId, int page, String select) {
-        if ("voter".equals(select)) {
-            PageRequest pageRequest = PageRequest.of(page, 10);
-            return answerRepository.findByQuestionIdOrderByVoterSize(questionId, pageRequest);
-        } else if ("createdAt".equals(select)){
-            List<Sort.Order> sorts = new ArrayList<>();
-            sorts.add(Sort.Order.desc(select));
-            Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+    public Page<Answer> findByQustionId(Long questionId, int page, SelectSortBy selectSortBy) {
+        switch (selectSortBy) {
+            case SelectSortBy.VOTER -> {
+                PageRequest pageRequest = PageRequest.of(page, 10);
+                return answerRepository.findByQuestionIdOrderByVoterSize(questionId, pageRequest);
+            }
+            case SelectSortBy.CREATED_AT -> {
+                List<Sort.Order> sorts = new ArrayList<>();
+                sorts.add(Sort.Order.desc("createdAt"));
+                Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
 
             return answerRepository.findByQustionId(questionId, pageable);
-        } else {
-            throw new RuntimeException();
+            }
+            default -> throw new RuntimeException();
         }
     }
 }

@@ -43,10 +43,10 @@
             </div>
             <div class="col-lg-2 ms-auto">
                 <select class="form-select" aria-label="Default select example">
-                    <option value="createdAt" th:selected="${param.select == null or param.select[0] == 'createdAt'}">
+                    <option value="CREATED_AT" th:selected="${param.select == null or param.select[0] == 'CREATED_AT'}">
                         최신순
                     </option>
-                    <option value="voter" th:selected="${param.select != null and param.select[0] == 'voter'}">추천순
+                    <option value="VOTER" th:selected="${param.select != null and param.select[0] == 'VOTER'}">추천순
                     </option>
                 </select>
             </div>
@@ -114,8 +114,7 @@
     <!-- 답변 작성 -->
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control"
-                  rows="10"></textarea>
+        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
         <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
