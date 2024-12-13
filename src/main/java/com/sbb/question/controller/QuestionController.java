@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.sbb.answer.domain.Answer;
+import com.sbb.answer.service.AnswerService;
 import com.sbb.controller.request.AnswerForm;
 import com.sbb.question.controller.request.QuestionForm;
 import com.sbb.question.domain.Question;
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/question")
 public class QuestionController {
 	private final QuestionService questionService;
+	private final AnswerService answerService;
 	private final SiteUserService siteUserService;
 
 	@GetMapping("/list")
@@ -42,9 +45,12 @@ public class QuestionController {
 	}
 
 	@GetMapping("/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm) {
+	public String detail(Model model, @PathVariable("id") Long id, AnswerForm answerForm, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value="select", defaultValue = "createdAt") String select) {
 		Question question = questionService.getQuestion(id);
+		Page<Answer> answerPage = answerService.findByQustionId(question.id(), page, select);
+		model.addAttribute("answerPage", answerPage);
 		model.addAttribute("question", question);
+		model.addAttribute("answerForm", answerForm);
 		return "question_detail";
 	}
 

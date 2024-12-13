@@ -1,8 +1,14 @@
 package com.sbb.answer.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.sbb.answer.domain.Answer;
@@ -67,5 +73,20 @@ public class AnswerService {
         }
         answer.voter().add(siteUser);
         answerRepository.save(answer);
+    }
+
+    public Page<Answer> findByQustionId(Long questionId, int page, String select) {
+        if ("voter".equals(select)) {
+            PageRequest pageRequest = PageRequest.of(page, 10);
+            return answerRepository.findByQuestionIdOrderByVoterSize(questionId, pageRequest);
+        } else if ("createdAt".equals(select)){
+            List<Sort.Order> sorts = new ArrayList<>();
+            sorts.add(Sort.Order.desc(select));
+            Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+
+            return answerRepository.findByQustionId(questionId, pageable);
+        } else {
+            throw new RuntimeException();
+        }
     }
 }

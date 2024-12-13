@@ -35,10 +35,25 @@
         </div>
     </div>
     <!-- 답변의 갯수 표시 -->
-    <h5 class="border-bottom my-3 py-2"
-        th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+    <div class="container text-center">
+        <div class="row align-items-center">
+            <div class="col-md-auto">
+                <h5 class="border-bottom my-3 py-2"
+                    th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
+            </div>
+            <div class="col-lg-2 ms-auto">
+                <select class="form-select" aria-label="Default select example">
+                    <option value="createdAt" th:selected="${param.select == null or param.select[0] == 'createdAt'}">
+                        최신순
+                    </option>
+                    <option value="voter" th:selected="${param.select != null and param.select[0] == 'voter'}">추천순
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
     <!-- 답변 반복 시작 -->
-    <div class="card my-3" th:each="answer : ${question.answerList}">
+    <div class="card my-3" th:each="answer : ${answerPage.getContent()}">
         <a th:id="|answer_${answer.id}|"></a>
         <div class="card-body">
             <div class="card-text" th:utext="${@commonUtil.markdown(answer.content)}"></div>
@@ -72,6 +87,30 @@
         </div>
     </div>
     <!-- 답변 반복 끝  -->
+    <div th:if="${!answerPage.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!answerPage.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${answerPage.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, answerPage.totalPages-1)}"
+                th:if="${page >= answerPage.number-5 and page <= answerPage.number+5}"
+                th:classappend="${page == answerPage.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!answerPage.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${answerPage.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <form th:action="@{|/question/detail/${question.id}|}" method="get" id="searchForm">
+        <input type="hidden" id="page" name="page" th:value="${answerPage.number}">
+        <input type="hidden" id="select" name="select">
+    </form>
     <!-- 답변 작성 -->
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
@@ -82,6 +121,23 @@
     </form>
 </div>
 <script layout:fragment="script" type='text/javascript'>
+
+    const select_element = document.querySelector('.form-select');
+    select_element.addEventListener('change', function () {
+        document.getElementById('select').value = this.value; // 선택된 값을 hidden 필드에 설정
+        document.getElementById('page').value = 0;
+        document.getElementById('searchForm').submit();      // 폼 제출
+    });
+
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('select').value = document.querySelector('.form-select').value;
+            document.getElementById('searchForm').submit();
+        });
+    });
+
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function (element) {
         element.addEventListener('click', function () {
